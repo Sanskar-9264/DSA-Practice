@@ -21,7 +21,6 @@ public:
             }
             m[ps[j]]++;
         }
-        return count;
-        
+        return count;    
     }
 };
