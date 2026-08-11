@@ -6,7 +6,6 @@ public:
             allsubset.push_back(ans);
             return;
         }
-
         //if including
         ans.push_back(nums[i]);
         getallsubset(nums,ans,i+1,allsubset);
