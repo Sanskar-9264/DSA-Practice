@@ -1,30 +1,22 @@
 class Solution {
 public:
-
     bool isPalindrome(string& s, int start, int end) {
-
         while (start < end) {
             if (s[start] != s[end])
                 return false;
-
             start++;
             end--;
         }
-
         return true;
     }
-
     void solve(string& s, int idx,
                vector<string>& ans,
                vector<vector<string>>& result) {
 
-        // String completely partitioned
         if (idx == s.size()) {
             result.push_back(ans);
             return;
         }
-
-        // Try every possible substring
         for (int i = idx; i < s.size(); i++) {
 
             // Only choose palindrome substring
