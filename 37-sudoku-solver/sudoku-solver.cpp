@@ -1,71 +1,62 @@
 class Solution {
 public:
-
-    bool isSafe(vector<vector<char>>& board, int row, int col, char num) {
-
-        // Check row
-        for (int j = 0; j < 9; j++) {
-            if (board[row][j] == num)
+    bool issafe(vector<vector<char>>& board , int row , int col, int dig){
+        //horizontal checking 
+        for(int j = 0 ; j<9 ; j++){
+            if(board[row][j] == dig){
                 return false;
-        }
-
-        // Check column
-        for (int i = 0; i < 9; i++) {
-            if (board[i][col] == num)
-                return false;
-        }
-
-        // Check 3 x 3 box
-        int startRow = (row / 3) * 3;
-        int startCol = (col / 3) * 3;
-
-        for (int i = startRow; i < startRow + 3; i++) {
-            for (int j = startCol; j < startCol + 3; j++) {
-
-                if (board[i][j] == num)
-                    return false;
             }
         }
 
-        return true;
-    }
+        //vertical checinkg
+        for(int i = 0 ;i<9;i++){
+            if(board[i][col]==dig){
+                return false;
+            }
+        }
 
-    bool solve(vector<vector<char>>& board) {
-
-        // Find an empty cell
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
-
-                if (board[row][col] == '.') {
-
-                    // Try numbers 1 to 9
-                    for (char num = '1'; num <= '9'; num++) {
-
-                        if (isSafe(board, row, col, num)) {
-
-                            // Place number
-                            board[row][col] = num;
-
-                            // Recursively solve remaining Sudoku
-                            if (solve(board))
-                                return true;
-
-                            // Backtrack
-                            board[row][col] = '.';
-                        }
-                    }
-
-                    // No number worked
+        //grid checking
+        int sr = (row/3)*3;
+        int sc = (col/3)*3;
+        for(int i =sr ; i <= sr+2 ;i++){
+            for (int j = sc ; j<= sc+2 ;j++){
+                if(board[i][j]==dig){
                     return false;
                 }
             }
         }
 
-        // No empty cell left → Sudoku solved
         return true;
     }
+    bool sudoku(vector<vector<char>>& board , int row , int col){
 
+        int nextrow = row , nextcol = col+1;
+        if(nextcol == 9){
+            nextrow = row+1;
+            nextcol = 0;
+        }
+        //base case
+        if(row == 9){
+            return true;
+        }
+        //skip if already occupied
+        if(board[row][col] != '.'){
+            return sudoku(board , nextrow,nextcol);
+        }
+
+        //place the digit
+        for(char dig = '1';dig<='9';dig++){
+            if(issafe(board,row,col,dig)){
+                board[row][col] = dig;
+                if(sudoku(board , nextrow , nextcol)){
+                    return true;
+                }
+                board[row][col] = '.';
+            }
+        }
+        return false;
+    }
     void solveSudoku(vector<vector<char>>& board) {
-        solve(board);
+        sudoku(board,0,0);
     }
 };
